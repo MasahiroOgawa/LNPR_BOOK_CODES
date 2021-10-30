@@ -101,7 +101,7 @@ class Mcl:    ###mlparticle（12〜18行目）
 # In[4]:
 
 
-class EstimationAgent(Agent): 
+class EstimationAgent(Agent): # Agent+Estimator. Actually, these 2 should be independent, but in this book, it's combined.
     def __init__(self, time_interval, nu, omega, estimator):
         super().__init__(nu, omega)
         self.estimator = estimator
@@ -110,8 +110,9 @@ class EstimationAgent(Agent):
         self.prev_nu = 0.0
         self.prev_omega = 0.0
         
-    def decision(self, observation=None): 
-        self.estimator.motion_update(self.prev_nu, self.prev_omega, self.time_interval)
+    def decision(self, observation=None): #Actually this is just a estimator update.
+        #Actually, below is better done after observation_update() as a prediction.
+        self.estimator.motion_update(self.prev_nu, self.prev_omega, self.time_interval) 
         self.prev_nu, self.prev_omega = self.nu, self.omega
         self.estimator.observation_update(observation)
         return self.nu, self.omega
